@@ -194,3 +194,4 @@ cython_debug/
 .cursorindexingignore
 
 cached_articles.json
+clustered_articles.json

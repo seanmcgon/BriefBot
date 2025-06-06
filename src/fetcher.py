@@ -1,4 +1,5 @@
 import feedparser
+import trafilatura
 
 RSS_FEEDS = [
     "http://feeds.reuters.com/reuters/topNews",
@@ -33,3 +34,21 @@ def fetch_articles(rss_url, max_articles=10):
             "source": rss_url,
         })
     return articles
+
+def deduplicate_articles_by_title(articles):
+    seen_titles = set()
+    deduped = []
+
+    for article in articles:
+        title = article["title"].strip().lower()  # Normalize case + spacing
+        if title not in seen_titles:
+            seen_titles.add(title)
+            deduped.append(article)
+
+    return deduped
+
+def fetch_full_article(url):
+    downloaded = trafilatura.fetch_url(url)
+    if downloaded:
+        return trafilatura.extract(downloaded)
+    return None
