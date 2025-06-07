@@ -1,9 +1,10 @@
-from src.summarizer import get_daily_summary
+from src.summarizer import mistral_summarize
 from src.fetcher import RSS_FEEDS, fetch_articles, deduplicate_articles_by_title, fetch_full_article
 from src.classifier import categorize_article
 from src.grouper import cluster_articles, select_top_articles_by_category
 import json
 import os
+import time
 from collections import defaultdict
 
 def main():
@@ -50,6 +51,23 @@ def main():
                 article["full_text"] = full_text or "[Unable to extract content]"
         with open("top_full_texts.json", "w", encoding="utf-8") as f:
             json.dump(top_articles, f, indent=2, ensure_ascii=False)
+
+    summaries = {}
+
+    if USE_CACHE and os.path.exists("summaries.json"):
+        with open("summaries.json", "r", encoding="utf-8") as f:
+            summaries = json.load(f)
+    else:
+        for category, cluster_articles in top_articles.items():
+            full_texts = [a.get("full_text") for a in cluster_articles if a.get("full_text")]
+            combined_text = "\n\n".join(full_texts)
+            summary = mistral_summarize(combined_text)
+            summaries[category] = summary
+            time.sleep(1)
+        with open("summaries.json", "w", encoding="utf-8") as f:
+            json.dump(summaries, f, indent=2, ensure_ascii=False)
+    
+    #TODO: Make sure to list "article.link"s after the summaries for reference
 
 
 if __name__ == "__main__":
