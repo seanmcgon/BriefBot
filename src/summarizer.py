@@ -1,6 +1,7 @@
 from mistralai import Mistral
+import os
 
-api_key = "vNb4NbpiEo7HEB4tOSVWI84hy7j63voW"
+api_key = os.getenv("MISTRAL_KEY")
 model = "mistral-large-latest"
 client = Mistral(api_key=api_key)
 

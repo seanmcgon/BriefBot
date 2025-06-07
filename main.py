@@ -2,12 +2,15 @@ from src.summarizer import mistral_summarize
 from src.fetcher import RSS_FEEDS, fetch_articles, deduplicate_articles_by_title, fetch_full_article
 from src.classifier import categorize_article
 from src.grouper import cluster_articles, select_top_articles_by_category
+from src.emailer import build_html_email, send_email
 import json
 import os
 import time
 from collections import defaultdict
+from dotenv import load_dotenv
 
 def main():
+    load_dotenv()
     USE_CACHE = True
 
     all_articles = []
@@ -67,7 +70,24 @@ def main():
         with open("summaries.json", "w", encoding="utf-8") as f:
             json.dump(summaries, f, indent=2, ensure_ascii=False)
     
-    #TODO: Make sure to list "article.link"s after the summaries for reference
+    content = {}
+    for category, summary in summaries.items():
+        content[category] = {"text": summary}
+        content[category]["links"] = [a["link"] for a in top_articles[category]]
+
+    html = build_html_email(content)
+
+    send_email(
+        subject="📰 Your Daily BriefBot",
+        html_body=html,
+        from_email=os.getenv("SENDER"),
+        to_email=os.getenv("RECIPIENT"),
+        smtp_server="smtp.gmail.com",
+        smtp_port=465,
+        login=os.getenv("EMAIL"),
+        password=os.getenv("EMAIL_PASSWORD")
+    )
+
 
 
 if __name__ == "__main__":
