@@ -1,6 +1,7 @@
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import markdown
 
 def build_html_email(content):
     html = """
@@ -24,7 +25,7 @@ def build_html_email(content):
         html += f"""
         <div class="category">
             <div class="title">{category.upper()}</div>
-            <div class="text">{data['text']}</div>
+            <div class="text">{markdown.markdown(data['text'])}</div>
             <div class="links">
                 <b>Sources:</b><br>
                 {''.join(f'<a href="{link}">{link}</a><br>' for link in data['links'])}
