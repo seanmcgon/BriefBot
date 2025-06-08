@@ -61,8 +61,8 @@ def main():
         with open("summaries.json", "r", encoding="utf-8") as f:
             summaries = json.load(f)
     else:
-        for category, cluster_articles in top_articles.items():
-            full_texts = [a.get("full_text") for a in cluster_articles if a.get("full_text")]
+        for category, articles in top_articles.items():
+            full_texts = [a.get("full_text") for a in articles if a.get("full_text")]
             combined_text = "\n\n".join(full_texts)
             summary = mistral_summarize(combined_text)
             summaries[category] = summary
