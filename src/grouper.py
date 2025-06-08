@@ -11,6 +11,11 @@ def get_article_embedding(article):
     return model.encode(text, normalize_embeddings=True)  # normalize helps similarity comparisons
 
 def cluster_articles(articles, threshold=0.4):
+    if len(articles) < 2:
+        for a in articles:
+            a["story_cluster"] = 0
+        return articles
+    
     embeddings = np.array([get_article_embedding(a) for a in articles])
 
     clustering = AgglomerativeClustering(
@@ -30,8 +35,8 @@ def select_top_articles_by_category(grouped):
     top_articles = {}
 
     for category, articles in grouped.items():
-        # Sports category unnecessary
-        if category == "sports": continue
+        # Sports and other categories unnecessary
+        if category == "sports" or category == "other": continue
 
         # Group articles by story_cluster
         clusters = defaultdict(list)
