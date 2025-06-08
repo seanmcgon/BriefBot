@@ -10,7 +10,7 @@ def categorize_article(article):
     # result['labels'] is sorted by confidence
     article["category"] = result["labels"][0]
     article["confidence"] = result["scores"][0]
-    if article["confidence"] < 0.2:
+    if article["confidence"] < 0.375:
         article["category"] = "other"
     
     print(article['category'])
