@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 
 def main():
     load_dotenv()
-    USE_CACHE = True
+    USE_CACHE = False
 
     all_articles = []
 
