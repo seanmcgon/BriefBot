@@ -3,9 +3,7 @@ from src.fetcher import RSS_FEEDS, fetch_articles, deduplicate_articles_by_title
 from src.classifier import categorize_article
 from src.grouper import cluster_articles, select_top_articles_by_category
 from src.emailer import build_html_email, send_email
-import json
-import os
-import time
+import json, os, time
 from collections import defaultdict
 from dotenv import load_dotenv
 
