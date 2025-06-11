@@ -25,13 +25,16 @@ def build_html_email(content):
         html += f"""
         <div class="category">
             <div class="title">{category.upper()}</div>
-            <div class="text">{markdown.markdown(data['text'])}</div>
-            <div class="links">
-                <b>Sources:</b><br>
-                {''.join(f'<a href="{link}">{link}</a><br>' for link in data['links'])}
-            </div>
-        </div>
         """
+        for article in data:
+            html += f"""
+                <div class="text">{markdown.markdown(article['text'])}</div>
+                <div class="links">
+                    <b>Sources:</b><br>
+                    {''.join(f'<a href="{link}">{link}</a><br>' for link in article['links'])}
+                </div>
+            """
+        html += "</div>"
 
     html += """
     </body>

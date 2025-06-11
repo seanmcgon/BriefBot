@@ -1,6 +1,5 @@
 from sentence_transformers import SentenceTransformer
 from sklearn.cluster import AgglomerativeClustering
-from sklearn.metrics.pairwise import cosine_distances
 import numpy as np
 from collections import defaultdict
 
@@ -35,24 +34,15 @@ def select_top_articles_by_category(grouped):
     top_articles = {}
 
     for category, articles in grouped.items():
-        # Sports and other categories unnecessary
-        if category == "sports" or category == "other": continue
-
         # Group articles by story_cluster
         clusters = defaultdict(list)
         for article in articles:
             clusters[article["story_cluster"]].append(article)
 
-        # Find the largest cluster
-        largest_cluster = max(clusters.values(), key=len)
+        # Find the two largest clusters
+        top_two = sorted(clusters.items(), key=lambda item: len(item[1]), reverse=True)[:2]
+        top_two_clusters = [cluster for _, cluster in top_two]
 
-        if len(largest_cluster) > 1:
-            # If there's a clear top cluster, grab all articles
-            chosen_articles = largest_cluster
-        else:
-            # Fall back to highest confidence
-            chosen_articles = [max(articles, key=lambda a: a.get("confidence", 0))]
-
-        top_articles[category] = chosen_articles
+        top_articles[category] = top_two_clusters
 
     return top_articles

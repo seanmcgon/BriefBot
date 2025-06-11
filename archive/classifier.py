@@ -1,3 +1,5 @@
+# Deprecated as of June 2025 — replaced with curated RSS feeds
+
 from transformers import pipeline
 
 classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")

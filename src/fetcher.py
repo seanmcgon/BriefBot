@@ -1,38 +1,33 @@
 import feedparser
 import trafilatura
 
-RSS_FEEDS = [
-    "http://feeds.reuters.com/reuters/topNews",
-    "http://feeds.bbci.co.uk/news/world/rss.xml",
-    "http://feeds.bbci.co.uk/news/rss.xml",
-    "https://feeds.npr.org/1001/rss.xml",
-    "https://abcnews.go.com/abcnews/topstories",
-    "https://www.cbsnews.com/latest/rss/main",
-    "https://apnews.com/rss",
-    "https://www.aljazeera.com/xml/rss/all.xml",
+RSS_FEEDS_POLITICS = [
+    "https://www.pbs.org/newshour/feeds/rss/politics",
+    "http://rss.cnn.com/rss/cnn_allpolitics.rss",
     "https://feeds.npr.org/1014/rss.xml",
-    "https://www.sciencedaily.com/rss/all.xml",
-    "http://feeds.reuters.com/reuters/businessNews",
-    "https://rss.dw.com/rdf/rss-en-all",
-    "https://techcrunch.com/feed/",
-    "https://www.theverge.com/rss/index.xml",
-    "https://feeds.arstechnica.com/arstechnica/index",
-    "https://www.wired.com/feed/rss",
-    "https://hnrss.org/frontpage",
-    "https://www.trackgit.com/github/rss/trending",
-    "https://www.techmeme.com/feed.xml",
+    "http://feeds.foxnews.com/foxnews/politics",
 ]
 
-def fetch_articles(rss_url, max_articles=10):
+RSS_FEEDS_TECH = [
+    "https://thenextweb.com/feed/",
+    "https://venturebeat.com/feed/",
+    "https://www.zdnet.com/news/rss.xml",
+]
+
+def fetch_articles(rss_url, category, max_articles=10):
+    print("Parsing ", rss_url)
     feed = feedparser.parse(rss_url)
     articles = []
-    for entry in feed.entries[:max_articles]:
+    for entry in feed.entries:
+        if entry.title.startswith("WATCH"): continue
         articles.append({
             "title": entry.title,
             "link": entry.link,
-            "summary": entry.summary,
+            "summary": entry.get('summary') or entry.get('description') or '',
             "source": rss_url,
+            "category": category,
         })
+        if len(articles) == 10: break
     return articles
 
 def deduplicate_articles_by_title(articles):
