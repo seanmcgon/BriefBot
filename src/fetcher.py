@@ -11,7 +11,7 @@ RSS_FEEDS_POLITICS = [
 RSS_FEEDS_TECH = [
     "https://thenextweb.com/feed/",
     "https://venturebeat.com/feed/",
-    "https://www.zdnet.com/news/rss.xml",
+    "https://www.technologyreview.com/feed/",
 ]
 
 def fetch_articles(rss_url, category, max_articles=10):
@@ -19,7 +19,7 @@ def fetch_articles(rss_url, category, max_articles=10):
     feed = feedparser.parse(rss_url)
     articles = []
     for entry in feed.entries:
-        if entry.title.startswith("WATCH"): continue
+        if entry.title.startswith(("WATCH", "The Download:")): continue
         articles.append({
             "title": entry.title,
             "link": entry.link,

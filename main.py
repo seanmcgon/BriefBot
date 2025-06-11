@@ -2,7 +2,7 @@ from src.summarizer import mistral_summarize
 from src.fetcher import RSS_FEEDS_POLITICS, RSS_FEEDS_TECH, fetch_articles, deduplicate_articles_by_title, fetch_full_article
 from src.grouper import cluster_articles, select_top_articles_by_category
 from src.emailer import build_html_email, send_email
-import json, os, time
+import json, os, time, random
 from collections import defaultdict
 from dotenv import load_dotenv
 
@@ -30,6 +30,7 @@ def main():
         with open("clustered_articles.json", "r", encoding="utf-8") as f:
             grouped = json.load(f)
     else:
+        random.shuffle(all_articles)
         for article in all_articles:
             grouped[article["category"]].append(article)
 
