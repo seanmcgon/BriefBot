@@ -54,41 +54,41 @@ def main():
         with open("top_full_texts.json", "w", encoding="utf-8") as f:
             json.dump(top_articles, f, indent=2, ensure_ascii=False)
 
-    # summaries = defaultdict(list)
+    summaries = defaultdict(list)
 
-    # if USE_CACHE and os.path.exists("summaries.json"):
-    #     with open("summaries.json", "r", encoding="utf-8") as f:
-    #         summaries = json.load(f)
-    # else:
-    #     for category, clusters in top_articles.items():
-    #         for cluster in clusters:
-    #             full_texts = [a.get("full_text") for a in cluster if a.get("full_text")]
-    #             combined_text = "\n\n".join(full_texts)
-    #             summary = mistral_summarize(combined_text)
-    #             summaries[category].append(summary)
-    #             time.sleep(1)
-    #     with open("summaries.json", "w", encoding="utf-8") as f:
-    #         json.dump(summaries, f, indent=2, ensure_ascii=False)
+    if USE_CACHE and os.path.exists("summaries.json"):
+        with open("summaries.json", "r", encoding="utf-8") as f:
+            summaries = json.load(f)
+    else:
+        for category, clusters in top_articles.items():
+            for cluster in clusters:
+                full_texts = [a.get("full_text") for a in cluster if a.get("full_text")]
+                combined_text = "\n\n".join(full_texts)
+                summary = mistral_summarize(combined_text)
+                summaries[category].append(summary)
+                time.sleep(1)
+        with open("summaries.json", "w", encoding="utf-8") as f:
+            json.dump(summaries, f, indent=2, ensure_ascii=False)
     
-    # content = defaultdict(list)
-    # for category, sums in summaries.items():
-    #     for i in range(2):
-    #         obj = {"text": sums[i]}
-    #         obj["links"] = [a["link"] for a in top_articles[category][i]]
-    #         content[category].append(obj)
+    content = defaultdict(list)
+    for category, sums in summaries.items():
+        for i in range(2):
+            obj = {"text": sums[i]}
+            obj["links"] = [a["link"] for a in top_articles[category][i]]
+            content[category].append(obj)
 
-    # html = build_html_email(content)
+    html = build_html_email(content)
 
-    # send_email(
-    #     subject="📰 Your Daily BriefBot",
-    #     html_body=html,
-    #     from_email=os.getenv("SENDER"),
-    #     to_email=os.getenv("RECIPIENT"),
-    #     smtp_server="smtp.gmail.com",
-    #     smtp_port=465,
-    #     login=os.getenv("EMAIL"),
-    #     password=os.getenv("EMAIL_PASSWORD")
-    # )
+    send_email(
+        subject="📰 Your Daily BriefBot",
+        html_body=html,
+        from_email=os.getenv("SENDER"),
+        to_email=os.getenv("RECIPIENT"),
+        smtp_server="smtp.gmail.com",
+        smtp_port=465,
+        login=os.getenv("EMAIL"),
+        password=os.getenv("EMAIL_PASSWORD")
+    )
 
 
 
