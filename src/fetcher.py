@@ -1,25 +1,34 @@
 import feedparser
 import trafilatura
+from urllib.parse import urlparse
 
 RSS_FEEDS_POLITICS = [
-    "https://www.pbs.org/newshour/feeds/rss/politics",
-    "http://rss.cnn.com/rss/cnn_allpolitics.rss",
-    "https://feeds.npr.org/1014/rss.xml",
-    "http://feeds.foxnews.com/foxnews/politics",
+    ("https://www.pbs.org/newshour/feeds/rss/politics", "pbs.org"),
+    ("http://rss.cnn.com/rss/cnn_allpolitics.rss", "cnn.com"),
+    ("https://feeds.npr.org/1014/rss.xml", "npr.org"),
+    ("http://feeds.foxnews.com/foxnews/politics", "foxnews.com"),
 ]
 
 RSS_FEEDS_TECH = [
-    "https://thenextweb.com/feed/",
-    "https://venturebeat.com/feed/",
-    "https://www.technologyreview.com/feed/",
+    ("https://thenextweb.com/feed/", "thenextweb.com"),
+    ("https://venturebeat.com/feed/", "venturebeat.com"),
+    ("https://www.technologyreview.com/feed/", "technologyreview.com"),
 ]
 
-def fetch_articles(rss_url, category, max_articles=10):
+def is_valid_domain(entry_url, expected_domain):
+    parsed = urlparse(entry_url)
+    return expected_domain in parsed.netloc
+
+def fetch_articles(source, category, max_articles=10):
+    rss_url, domain = source
     print("Parsing ", rss_url)
     feed = feedparser.parse(rss_url)
     articles = []
     for entry in feed.entries:
+        # Prevent certain types of articles and link hijacking
         if entry.title.startswith(("WATCH", "The Download:")): continue
+        if not is_valid_domain(entry['link'], domain): continue
+
         articles.append({
             "title": entry.title,
             "link": entry.link,
