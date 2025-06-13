@@ -6,7 +6,7 @@ model = "mistral-large-latest"
 client = Mistral(api_key=api_key)
 
 def mistral_summarize(text):
-    for i in range(5):
+    for i in range(10):
         try:
             chat_response = client.chat.complete(
                 model=model,
