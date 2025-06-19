@@ -1,7 +1,8 @@
 from sentence_transformers import SentenceTransformer
 from sklearn.cluster import AgglomerativeClustering
 import numpy as np
-from collections import defaultdict
+from collections import defaultdict, deque
+import os, json
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
@@ -40,9 +41,34 @@ def select_top_articles_by_category(grouped):
             clusters[article["story_cluster"]].append(article)
 
         # Find the two largest clusters
-        top_two = sorted(clusters.items(), key=lambda item: len(item[1]), reverse=True)[:2]
-        top_two_clusters = [cluster for _, cluster in top_two]
+        sorted_clusters = sorted(clusters.items(), key=lambda item: len(item[1]), reverse=True)
+        clusters_by_size = [cluster for _, cluster in sorted_clusters]
+        chosen_clusters = []
+        recent_clusters = deque([], 20)
+        if os.path.exists(f"{category}_recent_clusters.json"):
+            with open(f"{category}_recent_clusters.json", "r", encoding="utf-8") as f:
+                loaded = json.load(f)
+                recent_clusters = deque([set(item) for item in loaded], 20)
+            for cur_cluster in clusters_by_size:
+                # Skip if we've seen these same articles in last ten days
+                links = set([a["link"] for a in cur_cluster])
+                is_subset = any(links.issubset(cluster) for cluster in recent_clusters)
+                if is_subset: continue
 
-        top_articles[category] = top_two_clusters
+                chosen_clusters.append(cur_cluster)
+                recent_clusters.append(links)
+                if len(chosen_clusters) == 2: break
+        else:
+            chosen_clusters = clusters_by_size[:2]
+            for cur_cluster in chosen_clusters:
+                links = set([a["link"] for a in cur_cluster])
+                recent_clusters.append(links)
+        
+        serializable_data = [list(s) for s in recent_clusters]
+        with open(f"{category}_recent_clusters.json", "w", encoding="utf-8") as f:
+            json.dump(serializable_data, f, indent=2, ensure_ascii=False)
+
+
+        top_articles[category] = chosen_clusters
 
     return top_articles
