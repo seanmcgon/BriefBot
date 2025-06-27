@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 
 RSS_FEEDS_POLITICS = [
     ("https://www.pbs.org/newshour/feeds/rss/politics", "pbs.org"),
-    ("http://rss.cnn.com/rss/cnn_allpolitics.rss", "cnn.com"),
+    ("https://slate.com/feeds/news-and-politics.rss", "slate.com"),
     ("https://feeds.npr.org/1014/rss.xml", "npr.org"),
     ("http://feeds.foxnews.com/foxnews/politics", "foxnews.com"),
 ]
