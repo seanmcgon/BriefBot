@@ -45,8 +45,8 @@ def select_top_articles_by_category(grouped):
         clusters_by_size = [cluster for _, cluster in sorted_clusters]
         chosen_clusters = []
         recent_clusters = deque([], 20)
-        if os.path.exists(f"{category}_recent_clusters.json"):
-            with open(f"{category}_recent_clusters.json", "r", encoding="utf-8") as f:
+        if os.path.exists(f"cache/{category}_cache.json"):
+            with open(f"cache/{category}_cache.json", "r", encoding="utf-8") as f:
                 loaded = json.load(f)
                 recent_clusters = deque([set(item) for item in loaded], 20)
             for cur_cluster in clusters_by_size:
@@ -65,7 +65,7 @@ def select_top_articles_by_category(grouped):
                 recent_clusters.append(links)
         
         serializable_data = [list(s) for s in recent_clusters]
-        with open(f"{category}_recent_clusters.json", "w", encoding="utf-8") as f:
+        with open(f"cache/{category}_cache.json", "w", encoding="utf-8") as f:
             json.dump(serializable_data, f, indent=2, ensure_ascii=False)
 
 

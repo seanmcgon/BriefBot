@@ -17,6 +17,16 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+      - name: Download politics_cache artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: politics_cache
+          path: cache
+      - name: Download tech_cache artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: tech_cache
+          path: cache
       - name: Run BriefBot
         run: python main.py
         env:
@@ -25,3 +35,13 @@ jobs:
           RECIPIENT: ${{ secrets.RECIPIENT }}
           SENDER: ${{ secrets.SENDER }}
           EMAIL: ${{ secrets.EMAIL }}
+      - name: Upload politics_cache
+        uses: actions/upload-artifact@v4
+        with:
+          name: politics_cache
+          path: cache/politics_cache.json
+      - name: Upload tech_cache
+        uses: actions/upload-artifact@v4
+        with:
+          name: tech_cache
+          path: cache/tech_cache.json

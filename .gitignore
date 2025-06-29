@@ -197,3 +197,5 @@ cached_articles.json
 clustered_articles.json
 top_full_texts.json
 summaries.json
+cache/politics_cache.json
+cache/tech_cache.json
