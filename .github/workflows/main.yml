@@ -22,11 +22,13 @@ jobs:
         with:
           name: politics_cache
           path: cache
+        continue-on-error: true
       - name: Download tech_cache artifact
         uses: actions/download-artifact@v4
         with:
           name: tech_cache
           path: cache
+        continue-on-error: true
       - name: Run BriefBot
         run: python main.py
         env:
