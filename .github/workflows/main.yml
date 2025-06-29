@@ -21,7 +21,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: cache
-          key: briefbot-cache
+          key: briefbot-cache-${{ github.run_id }}
+          restore-keys: |
+            briefbot-cache-
       - name: Run BriefBot
         run: python main.py
         env:
@@ -34,4 +36,4 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: cache
-          key: briefbot-cache
+          key: briefbot-cache-${{ github.run_id }}
