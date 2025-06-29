@@ -65,8 +65,6 @@ def select_top_articles_by_category(grouped):
                 recent_clusters.append(links)
         
         serializable_data = [list(s) for s in recent_clusters]
-        print("Current working directory:", os.getcwd())
-        print("Target path:", f"cache/{category}_cache.json")
         with open(f"cache/{category}_cache.json", "w", encoding="utf-8") as f:
             json.dump(serializable_data, f, indent=2, ensure_ascii=False)
 
