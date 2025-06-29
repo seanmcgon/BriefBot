@@ -49,6 +49,7 @@ def select_top_articles_by_category(grouped):
             with open(f"cache/{category}_cache.json", "r", encoding="utf-8") as f:
                 loaded = json.load(f)
                 recent_clusters = deque([set(item) for item in loaded], 20)
+            print(f"Recent {category} clusters:", recent_clusters)
             for cur_cluster in clusters_by_size:
                 # Skip if we've seen these same articles in last ten days
                 links = set([a["link"] for a in cur_cluster])
