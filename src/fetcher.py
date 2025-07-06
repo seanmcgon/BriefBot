@@ -10,7 +10,7 @@ RSS_FEEDS_POLITICS = [
 ]
 
 RSS_FEEDS_TECH = [
-    ("https://thenextweb.com/feed/", "thenextweb.com"),
+    ("https://spectrum.ieee.org/feeds/feed.rss", "spectrum.ieee.org"),
     ("https://venturebeat.com/feed/", "venturebeat.com"),
     ("https://www.technologyreview.com/feed/", "technologyreview.com"),
 ]
@@ -26,14 +26,14 @@ def fetch_articles(source, category, max_articles=10):
     articles = []
     for entry in feed.entries:
         # Prevent certain types of articles and link hijacking
-        if entry.title.startswith(("WATCH", "The Download:")): continue
+        if entry.title.startswith(("WATCH", "The Download:", "Video Friday:")): continue
         if "up-first-newsletter" in entry.link: continue
         if not is_valid_domain(entry['link'], domain): continue
 
         articles.append({
             "title": entry.title,
             "link": entry.link,
-            "summary": entry.get('summary') or entry.get('description') or '',
+            "summary": entry.get('summary')[:300] or entry.get('description')[:300] or '',
             "source": rss_url,
             "category": category,
         })
