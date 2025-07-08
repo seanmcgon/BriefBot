@@ -28,6 +28,7 @@ def fetch_articles(source, category, max_articles=10):
         # Prevent certain types of articles and link hijacking
         if entry.title.startswith(("WATCH", "The Download:", "Video Friday:")): continue
         if "up-first-newsletter" in entry.link: continue
+        if "/podcasts/" in entry.link: continue
         if not is_valid_domain(entry['link'], domain): continue
 
         articles.append({
