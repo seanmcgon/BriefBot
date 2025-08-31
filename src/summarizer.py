@@ -16,8 +16,9 @@ def mistral_summarize(text):
                         "content": """Please summarize the submitted text. The text may come from several different sources covering the same
                         story; please synthesize across the sources as best you can. Make your response as long as needed for an adequate
                         level of detail, about the length of a typical article. Format it like an article with a title (markdown), 
-                        but avoid giant whitespace gaps between paragraphs. Do not apply your own knowledge to the summaries, as it is often
-                        outdated (e.g. do not assume you know the current year or the current president) - go only off of the articles' text.""",
+                        but avoid giant whitespace gaps between paragraphs. Do not, under any circumstances, apply your own knowledge to the summaries, 
+                        as it is often outdated (e.g. do not assume you know the current year or the current president) - go only off of the articles'
+                        text. I repeat: DO NOT use any outside information, ever; pure summaries only.""",
                     },
                     {
                         "role": "user",
