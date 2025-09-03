@@ -1,5 +1,11 @@
 from src.summarizer import mistral_summarize
-from src.fetcher import RSS_FEEDS_POLITICS, RSS_FEEDS_TECH, fetch_articles, deduplicate_articles_by_title, fetch_full_article
+from src.fetcher import (
+    RSS_FEEDS_POLITICS,
+    RSS_FEEDS_TECH,
+    fetch_articles,
+    deduplicate_articles_by_title,
+    fetch_full_article,
+)
 from src.grouper import cluster_articles, select_top_articles_by_category
 from src.emailer import build_html_email, send_email
 import json, os, time, random
@@ -70,7 +76,7 @@ def main():
                 time.sleep(1)
         with open("summaries.json", "w", encoding="utf-8") as f:
             json.dump(summaries, f, indent=2, ensure_ascii=False)
-    
+
     content = defaultdict(list)
     for category, sums in summaries.items():
         for i in range(2):
@@ -90,7 +96,6 @@ def main():
         login=os.getenv("EMAIL"),
         password=os.getenv("EMAIL_PASSWORD")
     )
-
 
 
 if __name__ == "__main__":
