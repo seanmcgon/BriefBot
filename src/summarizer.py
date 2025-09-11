@@ -20,7 +20,8 @@ def mistral_summarize(text):
                             level of detail, about the length of a typical article. Format it like an article with a title (markdown), 
                             but avoid giant whitespace gaps between paragraphs. Do not, under any circumstances, apply your own knowledge to the summaries, 
                             as it is often outdated (e.g. do not assume you know the current year or the current president) - go only off of the articles'
-                            text. I repeat: DO NOT use any outside information, ever; pure summaries only.""",
+                            text. I repeat: DO NOT use any outside information, ever; pure summaries only. And DO NOT ever include hypothetical examples 
+                            or ANYTHING that is not explicitly mentioned in the articles.""",
                         },
                         {
                             "role": "user",
