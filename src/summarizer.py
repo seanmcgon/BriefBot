@@ -9,7 +9,7 @@ models = ["mistral-large-latest", "mistral-medium-latest", "mistral-small-latest
 
 def mistral_summarize(text):
     for model in models:
-        for i in range(9):
+        for i in range(10):
             try:
                 chat_response = client.chat.complete(
                     model=model,
