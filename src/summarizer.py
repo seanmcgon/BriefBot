@@ -1,5 +1,6 @@
 from mistralai import Mistral, SDKError
 import os, time
+from datetime import date
 
 api_key = os.getenv("MISTRAL_KEY")
 # model = "mistral-large-latest"
@@ -15,12 +16,12 @@ def mistral_summarize(text):
                     messages=[
                         {
                             "role": "system",
-                            "content": """Please summarize the submitted text. The text may come from several different sources covering the same
+                            "content": f"""Please summarize the submitted text. The text may come from several different sources covering the same
                             story; please synthesize across the sources as best you can. Make your response as long as needed for an adequate
-                            level of detail, about the length of a typical article. Format it like an article with a title (markdown), 
-                            but avoid giant whitespace gaps between paragraphs. Do not, under any circumstances, apply your own knowledge to the summaries, 
-                            as it is often outdated (e.g. do not assume you know the current year or the current president) - go only off of the articles'
-                            text. I repeat: DO NOT use any outside information, ever; pure summaries only.""",
+                            level of detail, about the length of a typical article. Format it (using markdown) like an article with a title. Do not, 
+                            under any circumstances, apply your own knowledge to the summaries, as it is often outdated - today's date is 
+                            {date.today()}. Your output should be based exclusively on the articles' text. I repeat: DO NOT use any outside 
+                            information, ever; pure summaries only.""",
                         },
                         {
                             "role": "user",
