@@ -19,7 +19,8 @@ def mistral_summarize(text, multiple):
             pure summaries only."""
         if multiple
         else """You will receive the full text from a single article. Please just add some markdown formatting to the original
-                text and return the result. If you notice that the title is repeated or something you can correct that too."""
+                text and return the result. If you notice that the title is repeated or something you can correct that too, 
+                but DO NOT change any of the author's original words."""
     )
 
     for model in models:
