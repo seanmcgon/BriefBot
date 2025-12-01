@@ -30,7 +30,7 @@ def fetch_articles(source, category, max_articles=10):
     articles = []
     for entry in feed.entries:
         # Prevent certain types of articles and link hijacking
-        if entry.title.startswith(("WATCH", "The Download:", "Video Friday:")): continue
+        if entry.title.startswith(("WATCH", "The Download:", "Video Friday:", "Fox News Politics Newsletter:")): continue
         if any(x in entry.link for x in ["/podcasts/", "/video/", "up-first-newsletter", "/newshour/show/", "/week-in-politics"]): continue
         if not is_valid_domain(entry['link'], domain): continue
 
