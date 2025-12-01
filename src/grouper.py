@@ -41,6 +41,7 @@ def select_top_articles_by_category(grouped):
             clusters[article["story_cluster"]].append(article)
 
         # Find the two largest clusters
+        # *Updated 11/30/25 to just return the one largest cluster*
         sorted_clusters = sorted(clusters.items(), key=lambda item: len(item[1]), reverse=True)
         clusters_by_size = [cluster for _, cluster in sorted_clusters]
         chosen_clusters = []
@@ -58,9 +59,9 @@ def select_top_articles_by_category(grouped):
 
                 chosen_clusters.append(cur_cluster)
                 recent_clusters.append(links)
-                if len(chosen_clusters) == 2: break
+                if len(chosen_clusters) == 1: break
         else:
-            chosen_clusters = clusters_by_size[:2]
+            chosen_clusters = clusters_by_size[:1]
             for cur_cluster in chosen_clusters:
                 links = set([a["link"] for a in cur_cluster])
                 recent_clusters.append(links)

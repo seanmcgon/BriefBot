@@ -69,9 +69,17 @@ def main():
     else:
         for category, clusters in top_articles.items():
             for cluster in clusters:
-                full_texts = [a.get("full_text") for a in cluster if a.get("full_text")]
-                combined_text = "\n\n".join(full_texts)
-                summary = mistral_summarize(combined_text)
+                summary = ""
+                # If there are multiple articles in the cluster, we'll tell Mistral to synthesize
+                # Otherwise, we'll just ask Mistral to add formatting and keep original text
+                if len(cluster) > 1:
+                    full_texts = [a.get("full_text") for a in cluster if a.get("full_text")]
+                    combined_text = "\n\n".join(full_texts)
+                    summary = mistral_summarize(combined_text, True)
+                else:
+                    title_text = cluster[0].get("title") + "\n" + cluster[0].get("full_text")
+                    summary = mistral_summarize(title_text, False)
+                
                 summaries[category].append(summary)
                 time.sleep(1)
         with open("summaries.json", "w", encoding="utf-8") as f:
@@ -79,7 +87,7 @@ def main():
 
     content = defaultdict(list)
     for category, sums in summaries.items():
-        for i in range(2):
+        for i in range(len(sums)): # uses a loop here because we used to take more than one cluster
             obj = {"text": sums[i]}
             obj["links"] = [a["link"] for a in top_articles[category][i]]
             content[category].append(obj)
