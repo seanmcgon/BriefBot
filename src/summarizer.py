@@ -42,10 +42,7 @@ def mistral_summarize(text, multiple):
                 print("Summarized using " + model)
                 return chat_response.choices[0].message.content
             except SDKError as e:
-                if (
-                    "capacity exceeded" in str(e).lower()
-                    or "status 429" in str(e).lower()
-                ):
+                if any(x in str(e).lower() for x in ["capacity exceeded", "429", "503", "unreachable_backend"]):
                     wait = 2**i  # exponential backoff: 1s, 2s, 4s, etc.
                     print(f"Mistral busy, retrying in {wait}s...")
                     time.sleep(wait)
