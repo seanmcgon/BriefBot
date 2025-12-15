@@ -19,7 +19,8 @@ def mistral_summarize(text, multiple):
             pure summaries only."""
         if multiple
         else """You will receive the full text from a single article. Please just add some markdown formatting to the original
-                text and return the result. If you notice that the title is repeated or something you can correct that too."""
+                text and return the result. If you notice that the title is repeated or something you can correct that too, 
+                but DO NOT change any of the author's original words."""
     )
 
     for model in models:
@@ -41,10 +42,7 @@ def mistral_summarize(text, multiple):
                 print("Summarized using " + model)
                 return chat_response.choices[0].message.content
             except SDKError as e:
-                if (
-                    "capacity exceeded" in str(e).lower()
-                    or "status 429" in str(e).lower()
-                ):
+                if any(x in str(e).lower() for x in ["capacity exceeded", "429", "503", "unreachable_backend"]):
                     wait = 2**i  # exponential backoff: 1s, 2s, 4s, etc.
                     print(f"Mistral busy, retrying in {wait}s...")
                     time.sleep(wait)
