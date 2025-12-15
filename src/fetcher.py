@@ -13,7 +13,7 @@ RSS_FEEDS_POLITICS = [
 ]
 
 RSS_FEEDS_TECH = [
-    ("https://spectrum.ieee.org/feeds/feed.rss", "spectrum.ieee.org"),
+    # ("https://spectrum.ieee.org/feeds/feed.rss", "spectrum.ieee.org"),
     # ("https://venturebeat.com/feed/", "venturebeat.com"),
     ("https://www.technologyreview.com/feed/", "technologyreview.com"),
     ("https://techcrunch.com/feed/", "techcrunch.com")
