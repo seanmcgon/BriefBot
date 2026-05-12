@@ -1,4 +1,4 @@
-from mistralai.client import Mistral, SDKError
+from mistralai.client import Mistral
 import os, time
 from datetime import date
 
@@ -41,7 +41,7 @@ def mistral_summarize(text, multiple):
                 )
                 print("Summarized using " + model)
                 return chat_response.choices[0].message.content
-            except SDKError as e:
+            except Exception as e:
                 if any(x in str(e).lower() for x in ["capacity exceeded", "429", "503", "unreachable_backend"]):
                     wait = 2**i  # exponential backoff: 1s, 2s, 4s, etc.
                     print(f"Mistral busy, retrying in {wait}s...")
