@@ -1,4 +1,4 @@
-from mistralai import Mistral, SDKError
+from mistralai.client import Mistral, SDKError
 import os, time
 from datetime import date
 
