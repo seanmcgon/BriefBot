@@ -53,6 +53,8 @@ def mistral_summarize(text, multiple):
                         "unreachable_backend",
                         "timed out",
                         "timeout",
+                        "403",
+                        "tier_not_allowed",
                     ]
                 ):
                     wait = 2**i
