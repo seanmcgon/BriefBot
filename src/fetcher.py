@@ -31,6 +31,7 @@ def fetch_articles(source, category, max_articles=10):
     for entry in feed.entries:
         # Prevent certain types of articles and link hijacking
         if entry.title.startswith(("WATCH", "The Download:", "Video Friday:", "Fox News Politics Newsletter:")): continue
+        if any(tag.get("term", "").strip().lower() == "sponsored" for tag in entry.get("tags", [])): continue
         if any(x in entry.link for x in ["/podcasts/", "/video/", "up-first-newsletter", "/newshour/show/", "/week-in-politics", 
                                          "startups-from-disrupt-startup-battlefield"]): continue
         if not is_valid_domain(entry['link'], domain): continue
